@@ -92,6 +92,7 @@ GameLayer::GameLayer()
 	_projectiles = NULL;
 	_monstersDestroyed = 0;
 	_player = NULL;
+	_nextProjectile = NULL;
 }
 
 GameLayer::~GameLayer()
@@ -230,7 +231,7 @@ void GameLayer::spriteMoveFinished(CCNode *sender)
 		CCScene *gameOverScene = GameOverLayer::sceneWithWon(false);
 		CCDirector::sharedDirector()->replaceScene(gameOverScene);
 	}
-	else if(sprite->getTag() == 2)	//若是子弹精灵y
+	else if(sprite->getTag() == 2)	//若是子弹精灵
 	{
 		//	移除子弹
 		_projectiles->removeObject(sprite);
@@ -239,45 +240,73 @@ void GameLayer::spriteMoveFinished(CCNode *sender)
 
 void GameLayer::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 {
+	if (_nextProjectile != NULL)
+	{
+		return;
+	}
+
 	//	Choose one of the touches to work with
 	CCTouch *touch = (CCTouch*)pTouches->anyObject();
 	CCPoint location = this->convertTouchToNodeSpace(touch);
 
+	//	Set up initial location of projectile
 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
-	CCSprite *projectile = CCSprite::create("images/projectile2.png");
-	projectile->setPosition(ccp(20, winSize.height/2));
+	_nextProjectile = CCSprite::create("images/projectile2.png");
+	_nextProjectile->retain();
+	_nextProjectile->setPosition(ccp(20, winSize.height/2));
 
 	//	Determine offset of location to projectile
-	CCPoint offset = ccpSub(location, projectile->getPosition());
+	CCPoint offset = ccpSub(location, _nextProjectile->getPosition());
 
 	//	Bail out if you are shooting down or backwards
-	if(offset.x <= 0) return;
+	if(offset.x <= 0) 
+	{
+		return;
+	}
 
-	//	ok to add now - we've double checked position
-	//	添加子弹
-	this->addChild(projectile);
-
-	int realX = winSize.width + projectile->getContentSize().width/2;
+	//	Determine where you wish to shoot the projectile to
+	int realX = winSize.width + _nextProjectile->getContentSize().width / 2;
 	float ratio = (float)offset.y / (float)offset.x;
-	int realY = (realX * ratio) + projectile->getPosition().y;
+	int realY = realX * ratio + _nextProjectile->getPosition().y;
 	CCPoint realDest = ccp(realX, realY);
 
 	//	Determine the length of how far you're shooting
-	int offRealX = realX - projectile->getPositionX();
-	int offRealY = realY - projectile->getPositionY();
+	int offRealX = realX - _nextProjectile->getPositionX();
+	int offRealY = realY - _nextProjectile->getPositionY();
 	float length = sqrtf((offRealX * offRealX) + (offRealY * offRealY));
-	float velocity = 480/1; //	480pixels/1sec
-	float realMoveDuration = length/velocity;
+	float velocity = 480 / 1; //	480pixels/1sec
+	float realMoveDuration = length / velocity;
 
+	//	Determine angle to face
+	//	the angle you want to rotate is equal to the arctangle of the Y offset divided by the X offset, the result will be in radius.
+	float angleRadians = atanf((float)offRealY / (float)offRealX);
+	// convert radians to degrees, because Cocos2D deals with degrees.
+	float angleDegrees = CC_RADIANS_TO_DEGREES(angleRadians);	
+	float cocosAngle = -1 * angleDegrees;	// rotate in  counterclockwise
+	//	Would take 0.5 seconds to rotate 180 degrees, or half a cicle
+	float rotateDegreesPerSecond = 180 / 0.5;
+	float degreesDiff = _player->getRotation() - cocosAngle;
+	//	calculate how long this particular rotation should take
+	float rotateDuration = fabs(degreesDiff / rotateDegreesPerSecond);
+	_player->runAction(CCSequence::create(CCRotateTo::create(rotateDuration, cocosAngle),
+		CCCallFunc::create(this, callfunc_selector(GameLayer::finishShoot)), NULL));
+	
 	//	Move projectile to actual endpoint
-	CCMoveTo *actionMove = CCMoveTo::create(realMoveDuration, realDest);
-	CCCallFuncN *actionMoveDone = CCCallFuncN::create(this,callfuncN_selector(GameLayer::spriteMoveFinished));
-	projectile->runAction(CCSequence::create(actionMove, actionMoveDone, NULL));
+	_nextProjectile->runAction(CCSequence::create(CCMoveTo::create(realMoveDuration, realDest), 
+		CCCallFuncN::create(this,callfuncN_selector(GameLayer::spriteMoveFinished)), NULL));
 
-	projectile->setTag(2);
-	_projectiles->addObject(projectile);
+	_nextProjectile->setTag(2);
 
 	CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/pew-pew-lei.wav");
+}
+
+void GameLayer::finishShoot()
+{
+	this->addChild(_nextProjectile);
+	_projectiles->addObject(_nextProjectile);
+
+	_nextProjectile->release();
+	_nextProjectile = NULL;
 }
 
 void GameLayer::gameOverCallback(CCObject* pSender)

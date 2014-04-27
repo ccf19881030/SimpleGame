@@ -26,6 +26,7 @@ public:
 	void gameLogic(float dt);
 	void update(float dt);
 	virtual void ccTouchesEnded(cocos2d::CCSet *pTouches, cocos2d::CCEvent *pEvent);
+	void finishShoot();
 	void gameOverCallback(CCObject* pSender);
 
 private:
@@ -37,6 +38,7 @@ private:
 	int	_monstersDestroyed;	//	the projectiles the player has destroyed
 
 	cocos2d::CCSprite	*_player;	//	the player role sprite
+	cocos2d::CCSprite	*_nextProjectile;
 };
 
 #endif	//_GAME_SCENE_H
