@@ -10,7 +10,8 @@ This simple game is made by Ray Wenderlich in Cocos2d,his website is:[How To Mak
 * SimpleGame version 2.0
 
 * SimpleGame Version 3.0
-This is the final project.
+ 
+ This is the final project.
 
 
 
