@@ -6,10 +6,13 @@ This program is written in C++ ported from the cocos2d version,it's built with C
 This simple game is made by Ray Wenderlich in Cocos2d,his website is:[How To Make A Simple Iphone Game with Cocos2D 2.X Tutorial](http://www.raywenderlich.com/25736/how-to-make-a-simple-iphone-game-with-cocos2d-2-x-tutorial),it's written in Object-C with Cocos2d 2.x.
 
 * SimpleGame version 1.0
+ 
  How To Make A Simple iPhone Game with Cocos2D 2.X Tutorial
 * SimpleGame version 2.0
+ 
  Rotating Turrets How To Make A Simple iPhone Game with Cocos2D 2.X Part 2
 * SimpleGame Version 3.0
+ 
  Harder Monsters and More Levels How To Make A Simple iPhone Game with Cocos2D 2.X Part 3
  
  This is the final project.
