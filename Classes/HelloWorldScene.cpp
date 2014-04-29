@@ -1,5 +1,6 @@
 #include "HelloWorldScene.h"
 #include "GameOverScene.h"
+#include "Monster.h"
 
 USING_NS_CC;
 
@@ -111,7 +112,18 @@ GameLayer::~GameLayer()
 
 void GameLayer::addMonster()
 {
-	CCSprite* monster = CCSprite::create("images/monster.png");
+	//CCSprite* monster = CCSprite::create("images/monster.png");
+	Monster	*monster = NULL;
+	//	This will give a 50% chance to spawn each type of monster. 
+	if (0 == (rand() % 2))
+	{
+		monster = WeakAndFastMonster::create();
+	} 
+	else
+	{
+		monster = StrongAndSlowMonster::create();
+	}
+
 	//	Determine where to spawn the monster along the Y axis
 	CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 	int minY = monster->getContentSize().height / 2;
@@ -126,8 +138,9 @@ void GameLayer::addMonster()
 	this->addChild(monster);
 
 	// Determine speed of the monster
-	int minDuration = 2.0;
-	int maxDuration = 4.0;
+	//	Since you’ve moved the speed of the monsters into the classes, modify the min/max duration lines as follows
+	int minDuration = monster->getMinMoveDuration();	//2.0
+	int maxDuration = monster->getMaxMoveDuration();	//4.0
 	int rangeDuration = maxDuration - minDuration;
 	int actualDuration = (rand() % rangeDuration) + minDuration;
 
@@ -158,17 +171,26 @@ void GameLayer::update(float dt)
 	{
 		CCSprite *pProjectile = (CCSprite*)pObject1;
 
+		bool monsterHit = false;
+
 		CCArray *monstersToDelete = CCArray::create();
 
 		//	遍历当前所有的怪物
 		CCARRAY_FOREACH(_monsters, pObject2)
 		{
-			CCSprite *pMonster = (CCSprite*)pObject2;
-			//	判断当前的取得的子弹是否和怪物碰撞，进行碰撞检测
+			Monster *pMonster = (Monster*)pObject2;
+		
 			if(pProjectile->boundingBox().intersectsRect(pMonster->boundingBox()))
 			{
-				//	将被子弹击中的怪物加入到需要删除的怪物数组
-				monstersToDelete->addObject(pMonster);
+				//So basically, instead of instantly killing the monster, you subtract an HP and only destroy it if it’s 0 or lower.
+				//Also, note that you break out of the loop if the projectile hits a monster, 
+				//which means the projectile can only hit one monster per shot.
+				monsterHit = true;
+				pMonster->setHp(pMonster->getHp() - 1);
+				if (pMonster->getHp() <= 0)
+				{
+					monstersToDelete->addObject(pMonster);
+				}
 
 				break;
 			}
@@ -177,7 +199,7 @@ void GameLayer::update(float dt)
 		//	遍历需要删除的怪物数组
 		CCARRAY_FOREACH(monstersToDelete, pObject2)
 		{
-			CCSprite *monster = (CCSprite*)pObject2;
+			Monster *monster = (Monster*)pObject2;
 			//	从当前的数组中移除被子弹击中的怪物
 			_monsters->removeObject(monster);
 			//	从场景中移除被子弹击中的怪物
@@ -195,7 +217,8 @@ void GameLayer::update(float dt)
 			}
 		}
 
-		if(monstersToDelete->count() > 0)
+		/*if(monstersToDelete->count() > 0)*/
+		if(monsterHit)
 		{
 			projectilesToDelete->addObject(pProjectile);
 			CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("music/explosion.wav");
