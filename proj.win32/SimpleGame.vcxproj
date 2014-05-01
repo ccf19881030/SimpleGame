@@ -134,6 +134,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClCompile Include="..\Classes\AppDelegate.cpp" />
     <ClCompile Include="..\Classes\GameOverScene.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\Level.cpp" />
+    <ClCompile Include="..\Classes\LevelManager.cpp" />
     <ClCompile Include="..\Classes\Monster.cpp" />
     <ClCompile Include="..\Classes\StartGameScene.cpp" />
     <ClCompile Include="main.cpp" />
@@ -142,6 +144,8 @@ xcopy /Y /Q "$(ProjectDir)..\..\..\external\libwebsockets\win32\lib\*.*" "$(OutD
     <ClInclude Include="..\Classes\AppDelegate.h" />
     <ClInclude Include="..\Classes\GameOverScene.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\Level.h" />
+    <ClInclude Include="..\Classes\LevelManager.h" />
     <ClInclude Include="..\Classes\Monster.h" />
     <ClInclude Include="..\Classes\StartGameScene.h" />
     <ClInclude Include="main.h" />
