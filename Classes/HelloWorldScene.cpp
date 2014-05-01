@@ -1,6 +1,7 @@
 #include "HelloWorldScene.h"
 #include "GameOverScene.h"
 #include "Monster.h"
+#include "LevelManager.h"
 
 USING_NS_CC;
 
@@ -31,7 +32,7 @@ bool GameLayer::init()
 
 	do 
 	{
-		CC_BREAK_IF(! CCLayerColor::initWithColor(ccc4(255,255,255,255)));
+		CC_BREAK_IF(! CCLayerColor::initWithColor(LevelManager::sharedInstance()->curLevel()->getBackgroundColor()));
 
 		CCSize winSize = CCDirector::sharedDirector()->getWinSize();
 		_player = CCSprite::create("images/player2.png");
@@ -68,7 +69,7 @@ bool GameLayer::init()
 		pMenu->setPosition(CCPointZero);
 		this->addChild(pMenu, 1);
 
-		this->schedule(schedule_selector(GameLayer::gameLogic), 1.0);
+		this->schedule(schedule_selector(GameLayer::gameLogic), LevelManager::sharedInstance()->curLevel()->getSecsPerSpawn());
 
 		//	开启触摸事件
 		this->setTouchEnabled(true);
@@ -217,7 +218,6 @@ void GameLayer::update(float dt)
 			}
 		}
 
-		/*if(monstersToDelete->count() > 0)*/
 		if(monsterHit)
 		{
 			projectilesToDelete->addObject(pProjectile);
@@ -225,6 +225,7 @@ void GameLayer::update(float dt)
 		}
 
 		monstersToDelete->release();
+	}
 
 		//	遍历碰撞到的子弹数组
 		CCARRAY_FOREACH(projectilesToDelete, pObject1)
@@ -237,7 +238,6 @@ void GameLayer::update(float dt)
 		}
 
 		projectilesToDelete->release();
-	}
 }
 
 void GameLayer::spriteMoveFinished(CCNode *sender)

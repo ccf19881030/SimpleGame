@@ -1,5 +1,6 @@
 #include "GameOverScene.h"
 #include "HelloWorldScene.h"
+#include "LevelManager.h"
 
 USING_NS_CC;
 
@@ -39,11 +40,22 @@ bool GameOverLayer::initWithWon(bool won)
 		CCString *message;
 		if (won)
 		{
-			message = CCString::create("You won!");
+			LevelManager::sharedInstance()->nextLevel();
+			Level *curLevel = LevelManager::sharedInstance()->curLevel();
+			if (curLevel)
+			{
+				message = CCString::createWithFormat("Get ready for level %d!", curLevel->getLevelNum());
+			} 
+			else
+			{
+				message = CCString::create("You won!");
+				LevelManager::sharedInstance()->reset();
+			}
 		} 
 		else
 		{
 			message = CCString::create("You lose!");
+			LevelManager::sharedInstance()->reset();
 		}
 
 		CCSize winSize = CCDirector::sharedDirector()->getWinSize();
