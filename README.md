@@ -1,13 +1,16 @@
 # SimpleGame built with Cocos2d-x 2.2.3
 
-This program is written in C++ ported from the cocos2d version,it's built with Cocos2d-x 2.2.3, has been tested in Visual Studio 2010.
+This program is written in C++ ported from the cocos2d 2.x version,it's built with Cocos2d-x 2.2.3, has been tested in Visual Studio 2010.
 
-# About Cocos2DSimpleGame with Cocos2d 2.x
+## Cocos2d-x
+
+* [Cocos2d-x](http://www.cocos2d-x.org/)
+* [cocos-docs](https://github.com/chukong/cocos-docs)
+
+## About Cocos2DSimpleGame with Cocos2d 2.x
 
  Thanks to Cocos2DSimpleGame's author:Ray Wenderlich,his website is:[http://www.raywenderlich.com](http://www.raywenderlich.com).
-Ray is an indie software developer currently focusing on iPhone and iPad development, and the administrator of this site. He’s the founder of a small iPhone development studio called Razeware, and is passionate both about making apps and teaching others the techniques to make them.
 
-## Cocos2d 2.x version by Ray Wenderlich
 * 1、[How To Make A Simple iPhone Game with Cocos2D 2.X Tutorial](http://www.raywenderlich.com/25736/how-to-make-a-simple-iphone-game-with-cocos2d-2-x-tutorial)
 
 [Code download](http://cdn5.raywenderlich.com/downloads/Cocos2DSimpleGame_v2.zip)
