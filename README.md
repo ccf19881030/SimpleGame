@@ -4,7 +4,7 @@ This program is written in C++ ported from the cocos2d 2.x version,it's built wi
 
 ## Cocos2d-x
 
-* Cocos2d-x offical website : [http://www.cocos2d-x.org/](http://www.cocos2d-x.org/) , the 
+* Cocos2d-x offical website : [http://www.cocos2d-x.org/](http://www.cocos2d-x.org/)
 * cocos-docs : [https://github.com/chukong/cocos-docs](https://github.com/chukong/cocos-docs) , Documentations for Cocos2d-x, Cocos2d-html5 and CocoStudio.
 * cocoachina 苹果开发中文站 : [http://www.cocoachina.com/](http://www.cocoachina.com/)
 
