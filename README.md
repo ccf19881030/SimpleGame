@@ -4,8 +4,8 @@ This program is written in C++ ported from the cocos2d 2.x version,it's built wi
 
 ## Cocos2d-x
 
-* [Cocos2d-x](http://www.cocos2d-x.org/)
-* [cocos-docs](https://github.com/chukong/cocos-docs)
+* Cocos2d-x offical website : [http://www.cocos2d-x.org/](http://www.cocos2d-x.org/) , the 
+* cocos-docs : [https://github.com/chukong/cocos-docs](https://github.com/chukong/cocos-docs) , Documentations for Cocos2d-x, Cocos2d-html5 and CocoStudio.
 
 ## About Cocos2DSimpleGame with Cocos2d 2.x
 
